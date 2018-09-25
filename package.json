@@ -1,0 +1,26 @@
+{
+  "name": "http-api-assignment-ii",
+  "version": "1.0.0",
+  "description": "http api 2 assignment",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Tests complete\"",
+    "start": "node ./src/server.js",
+    "pretest": "eslint ./src --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sCallen21/http-api-assignment-ii.git"
+  },
+  "author": "Stephen Callen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sCallen21/http-api-assignment-ii/issues"
+  },
+  "homepage": "https://github.com/sCallen21/http-api-assignment-ii#readme",
+  "devDependencies": {
+    "eslint": "^5.5.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.14.0"
+  }
+}
