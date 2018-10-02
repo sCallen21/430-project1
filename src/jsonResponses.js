@@ -1,4 +1,4 @@
-const users = {};
+const games = {};
 
 // responds with body
 const respondJSON = (request, response, status, object) => {
@@ -14,9 +14,9 @@ const respondJSONMeta = (request, response, status) => {
 };
 
 // returns the user object as JSON
-const getUsers = (request, response) => {
+const getGames = (request, response) => {
   const responseJSON = {
-    users,
+    games,
   };
 
   respondJSON(request, response, 200, responseJSON);
@@ -33,14 +33,14 @@ const getNotFound = (request, response) => {
 };
 
 // adds a user via POST body
-const addUser = (request, response, body) => {
+const addGame = (request, response, body) => {
   // default message
   const responseJSON = {
-    message: 'Name and age are both required.',
+    message: 'Name and description are both required.',
   };
 
   // checks for both fields
-  if (!body.name || !body.age) {
+  if (!body.name || !body.desc) {
     responseJSON.id = 'Missing Parameters';
     return respondJSON(request, response, 400, responseJSON);
   }
@@ -48,16 +48,16 @@ const addUser = (request, response, body) => {
   // default status code is 201 (created)
   let responseCode = 201;
 
-  // if users name already exists, switch to 204 (updated). Otherwise make a new obj in users
-  if (users[body.name]) {
+  // if game name already exists, switch to 204 (updated). Otherwise make a new obj in games
+  if (games[body.name]) {
     responseCode = 204;
   } else {
-    users[body.name] = {};
+    games[body.name] = {};
   }
 
-  // updates/adds fields for user
-  users[body.name].name = body.name;
-  users[body.name].age = body.age;
+  // updates/adds fields for game
+  games[body.name].name = body.name;
+  games[body.name].desc = body.desc;
 
   // sends JSON response if created, otherwise sends meta response
   if (responseCode === 201) {
@@ -70,7 +70,7 @@ const addUser = (request, response, body) => {
 
 // exports
 module.exports = {
-  getUsers,
+  getGames,
   getNotFound,
-  addUser,
+  addGame,
 };

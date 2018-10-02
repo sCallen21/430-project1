@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Our simple HTTP server</title>
+  <title>Improv Shortform Library</title>
   <link rel="stylesheet" type="text/css" href="/style.css">
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
@@ -17,22 +17,30 @@
           p.textContent = `Message: ${obj.message}`;
           content.appendChild(p);
         }
-
-        if(obj.users) {
-          const userList = document.createElement('p');
-          const users = JSON.stringify(obj.users);
-          userList.textContent = users;
-          content.appendChild(userList);
+        //parses the list of games
+        if(obj.games) {
+          
+          for(let g in obj.games){
+            const gameDiv = document.createElement('div');
+            const gameName = document.createElement('h2');
+            const gameDesc = document.createElement('p');
+            
+            gameName.textContent = obj.games[g].name;
+            gameDesc.textContent = obj.games[g].desc;
+            
+            gameDiv.appendChild(gameName);
+            gameDiv.appendChild(gameDesc);
+            content.appendChild(gameDiv);
+          }
         }
       }
     };
 
     const handleResponse = (xhr) => {
       const content = document.querySelector('#content');
-      
+      content.innerHTML = "";
       switch(xhr.status) {
         case 200:
-          content.innerHTML = `<b>Success</b>`;
           break;
         case 201:
           content.innerHTML = `<b>Create</b>`;
@@ -53,22 +61,22 @@
       parseJSON(xhr, content);
     };
 
-    const sendPost = (e, nameForm) => {
-      const nameAction = nameForm.getAttribute('action');
-      const nameMethod = nameForm.getAttribute('method');
+    const sendPost = (e, gameForm) => {
+      const gameAction = gameForm.getAttribute('action');
+      const gameMethod = gameForm.getAttribute('method');
       
-      const nameField = nameForm.querySelector('#nameField');
-      const ageField = nameForm.querySelector('#ageField');
+      const nameField = gameForm.querySelector('#nameField');
+      const descField = gameForm.querySelector('#descField');
       
       const xhr = new XMLHttpRequest();
-      xhr.open(nameMethod, nameAction);
+      xhr.open(gameMethod, gameAction);
       
       xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
       xhr.setRequestHeader('Accept', 'application/json');
       
       xhr.onload = () => handleResponse(xhr);
       
-      const formData = `name=${nameField.value}&age=${ageField.value}`;
+      const formData = `name=${nameField.value}&desc=${descField.value}`;
       
       xhr.send(formData);
       
@@ -93,16 +101,16 @@
     }
 
     const init = () => {
-      const nameForm = document.querySelector('#nameForm');
+      const gameForm = document.querySelector('#gameForm');
       const userForm = document.querySelector('#userForm');
-      const addUser = (e) => {
-        sendPost(e, nameForm);
+      const addGame = (e) => {
+        sendPost(e, gameForm);
       };
       const getUsers = (e) => {
         sendGet(e, userForm);
       }
       
-      nameForm.addEventListener('submit', addUser);
+      gameForm.addEventListener('submit', addGame);
       userForm.addEventListener('submit', getUsers);
     };
 
@@ -111,24 +119,26 @@
 </head>
 <body>
   <section id="top">
-    <h3>POST Status Code Tests</h3>
-    <form id="nameForm" action="/addUser" method="post">
-      <label for="name">Name: </label>
+    <h1>RIT Improv's Shortform Library</h1>
+    <h3>Submit a shortform game</h3>
+    <form id="gameForm" action="/addGame" method="post">
+      <label for="name">Game Name: </label>
       <input id="nameField" type="text" name="name" />
-      <label for="age">Age: </label>
-      <input id="ageField" type="number" name="age" min="0" max="100" step="1"/>
-      <input type="submit" value="Add User" />
+      <br>
+      <textarea id="descField" rows="5" cols="50" name="desc">Enter description here...</textarea>
+      <br>
+      <input type="submit" value="Submit Game" />
     </form>
-    <form id="userForm" action="/getUsers" method="get">
+    <form id="userForm" action="/getGames" method="get">
       <select id='urlField'>
-        <option value='/getUsers'>/getUsers</option>
+        <option value='/getGames'>/getGames</option>
         <option value='/notReal'>/notReal</option>
       </select>
       <select id="methodSelect">
         <option value="get">GET</option>
         <option value="head">HEAD</option>
       </select>
-      <input type="submit" value="Get User" />
+      <input type="submit" value="Get Game" />
     </form>
   </section>
   <section id="content">

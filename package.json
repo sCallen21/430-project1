@@ -1,7 +1,7 @@
 {
-  "name": "http-api-assignment-ii",
+  "name": "430-project1",
   "version": "1.0.0",
-  "description": "http api 2 assignment",
+  "description": "Project 1",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Tests complete\"",
@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sCallen21/http-api-assignment-ii.git"
+    "url": "git+https://github.com/sCallen21/430-project1.git"
   },
   "author": "Stephen Callen",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/sCallen21/http-api-assignment-ii/issues"
+    "url": "https://github.com/sCallen21/430-project1/issues"
   },
-  "homepage": "https://github.com/sCallen21/http-api-assignment-ii#readme",
+  "homepage": "https://github.com/sCallen21/430-project1#readme",
   "devDependencies": {
     "eslint": "^5.5.0",
     "eslint-config-airbnb": "^17.1.0",

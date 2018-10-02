@@ -10,7 +10,7 @@ const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
 // handles POST requests
 const handlePost = (request, response, parsedUrl) => {
-  if (parsedUrl.pathname === '/addUser') {
+  if (parsedUrl.pathname === '/addGame') {
     const body = [];
 
     // spits out bad request if the upload stream errors
@@ -32,7 +32,7 @@ const handlePost = (request, response, parsedUrl) => {
       const bodyParams = query.parse(bodyString);
 
       // pass to the addUser function
-      jsonHandler.addUser(request, response, bodyParams);
+      jsonHandler.addGame(request, response, bodyParams);
     });
   }
 };
@@ -40,8 +40,8 @@ const handlePost = (request, response, parsedUrl) => {
 // handles GET requests
 const handleGet = (request, response, parsedUrl) => {
   if (parsedUrl.pathname === '/style.css') responseHandler.getCSS(request, response);
-  else if (parsedUrl.pathname === '/getUsers') {
-    jsonHandler.getUsers(request, response);
+  else if (parsedUrl.pathname === '/getGames') {
+    jsonHandler.getGames(request, response);
   } else if (parsedUrl.pathname === '/notReal') {
     jsonHandler.getNotFound(request, response);
   } else if (parsedUrl.pathname === '/') {
@@ -49,6 +49,7 @@ const handleGet = (request, response, parsedUrl) => {
   } else jsonHandler.getNotFound(request, response);
 };
 
+// onRequest is what runs when server is created
 const onRequest = (request, response) => {
   const parsedUrl = url.parse(request.url);
 
