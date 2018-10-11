@@ -39,14 +39,20 @@ const handlePost = (request, response, parsedUrl) => {
 
 // handles GET requests
 const handleGet = (request, response, parsedUrl) => {
+  const params = query.parse(parsedUrl.query);
+
   if (parsedUrl.pathname === '/style.css') responseHandler.getCSS(request, response);
   else if (parsedUrl.pathname === '/getGames') {
-    jsonHandler.getGames(request, response);
+    jsonHandler.getGames(request, response, params);
   } else if (parsedUrl.pathname === '/notReal') {
     jsonHandler.getNotFound(request, response);
+  } else if (parsedUrl.pathname === '/assets/corner.png') {
+    responseHandler.getCornerPic(request, response);
+  } else if (parsedUrl.pathname === '/assets/notFound.png') {
+    responseHandler.get404Pic(request, response);
   } else if (parsedUrl.pathname === '/') {
     responseHandler.getIndex(request, response);
-  } else jsonHandler.getNotFound(request, response);
+  } else responseHandler.getNotFound(request, response);
 };
 
 // onRequest is what runs when server is created

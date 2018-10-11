@@ -3,6 +3,60 @@ html, body {
   width: 100%;
   margin: 0;
   padding: 0;
+  background-color: #87db8a;
+}
+
+html {
+  min-height: 100%;
+  position: relative;
+  font-family: 'Marvel', sans-serif;
+  font-size: 1.5em;
+}
+
+header{
+  background-color: #46755a;
+  width: 100%;
+  font-size: 2em;
+  display: inline-block;
+  margin-bottom: 0;
+  color: white;
+}
+
+footer{
+  background-color: #46755a;
+  width: 100%;
+  display: inline-block;
+  text-align: center;
+  color: white;
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  padding-top: 20px;
+  padding-bottom: 50px;
+}
+
+form {
+  padding: 1em;
+}
+
+h1 {
+  font-family: 'Teko', sans-serif;
+}
+
+h2 {
+  color: #264738;
+  text-align: center;
+  font-size: 2em;
+  margin-top: 0;
+  font-family: 'Teko', sans-serif;
+  margin-bottom: 0;
+}
+
+h3 {
+  color: #264738;
+  font-size: 2em;
+  font-family: 'Teko', sans-serif;
+  margin-bottom: 0;
 }
 
 #top {
@@ -10,12 +64,49 @@ html, body {
   margin: 0 auto;
 }
 
-#top h1 {
-  font-size: 2em;
+#content {
+  margin-top: 50px;
+  font-size: 1em;
+  text-align: center;
 }
 
-#content {
-  margin-top: 100px;
-  font-size: 2em;
+#content > div {
+  border-color: #bdcfed;
+  border-radius: 0;
+  border-style: solid;
+  border-width: 5px;
+  text-align: left;
+  width: 50%;
+  padding: 30px;
+  margin: auto;
+}
+
+#content > div > h2{
   text-align: center;
+}
+
+#content > p {
+  text-align: center;
+  width: 50%;
+  margin: auto;
+}
+
+#corner {
+  width: 200px;
+  float: left;
+}
+
+#middleImage {
+  margin: auto;
+  width: 500px;
+  display: block;
+}
+
+#page {
+  background-color: white;
+  width: 70%;
+  margin: auto;
+  padding: 1px;
+  margin-top: 0;
+  padding-bottom: 100px;
 }

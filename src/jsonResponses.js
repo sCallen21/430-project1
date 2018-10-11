@@ -13,11 +13,47 @@ const respondJSONMeta = (request, response, status) => {
   response.end();
 };
 
-// returns the user object as JSON
-const getGames = (request, response) => {
-  const responseJSON = {
-    games,
-  };
+// returns the user object as JSON. Filters through results if
+const getGames = (request, response, parsedQuery) => {
+  let responseJSON = {};
+  let gamesToReturn = {};
+
+  // checks if there are any games to get back
+  if (Object.keys(games).length > 0) {
+    // if tags exist, otherwise parsedQuery will just be {}
+    if (parsedQuery.tags) {
+      const allSearches = parsedQuery.tags.split(' ');
+      const gamesArray = Object.values(games);
+      for (let i = 0; i < gamesArray.length; i++) {
+        // skips adding game to object if it is already in the return object
+        if (!gamesToReturn[gamesArray[i].name]) {
+          for (let j = 0; j < allSearches.length; j++) {
+            // if the search is exactly the game name
+            if (allSearches[j] === gamesArray[i].name) {
+              gamesToReturn[games[i].name] = games[i];
+            } else {
+              for (let k = 0; k < gamesArray[i].tags.length; k++) {
+                // if the search is one of the games tags and it isn't in the object yet
+                if (allSearches[j] === gamesArray[i].tags[k]) {
+                  gamesToReturn[gamesArray[i].name] = gamesArray[i];
+                }
+              }
+            }
+          }
+        }
+      }
+    } else {
+      // else just return all games
+      gamesToReturn = games;
+    }
+
+    responseJSON = {
+      gamesToReturn,
+    };
+  } else {
+    // otherwise send back a "no games" response
+    responseJSON = { message: 'No games here!' };
+  }
 
   respondJSON(request, response, 200, responseJSON);
 };
@@ -32,7 +68,7 @@ const getNotFound = (request, response) => {
   respondJSON(request, response, 404, responseJSON);
 };
 
-// adds a user via POST body
+// adds a game via POST body
 const addGame = (request, response, body) => {
   // default message
   const responseJSON = {
@@ -55,9 +91,15 @@ const addGame = (request, response, body) => {
     games[body.name] = {};
   }
 
+  // if body has tags in it, separate them into an array
+  let allTags = [];
+  if (body.tags) {
+    allTags = body.tags.split(' ');
+  }
   // updates/adds fields for game
   games[body.name].name = body.name;
   games[body.name].desc = body.desc;
+  games[body.name].tags = allTags;
 
   // sends JSON response if created, otherwise sends meta response
   if (responseCode === 201) {

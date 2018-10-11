@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Marvel|Teko:500');
+  </style>
   <title>Improv Shortform Library</title>
   <link rel="stylesheet" type="text/css" href="/style.css">
   
@@ -14,23 +17,31 @@
 
         if(obj.message){
           const p = document.createElement('p');
-          p.textContent = `Message: ${obj.message}`;
+          p.textContent = `${obj.message}`;
           content.appendChild(p);
         }
         //parses the list of games
-        if(obj.games) {
+        if(obj.gamesToReturn) {
           
-          for(let g in obj.games){
+          for(let g in obj.gamesToReturn){
             const gameDiv = document.createElement('div');
             const gameName = document.createElement('h2');
             const gameDesc = document.createElement('p');
+            const gameTags = document.createElement('p');
             
-            gameName.textContent = obj.games[g].name;
-            gameDesc.textContent = obj.games[g].desc;
+            gameName.textContent = obj.gamesToReturn[g].name;
+            gameDesc.textContent = obj.gamesToReturn[g].desc;
+            let allTags = "Tags: ";
+            for(let tag in obj.gamesToReturn[g].tags){
+              allTags = `${allTags}${obj.gamesToReturn[g].tags[tag]} `;
+            }
+            gameTags.textContent = allTags;
             
             gameDiv.appendChild(gameName);
             gameDiv.appendChild(gameDesc);
+            gameDiv.appendChild(gameTags);
             content.appendChild(gameDiv);
+            content.appendChild(document.createElement('br'));
           }
         }
       }
@@ -41,15 +52,19 @@
       content.innerHTML = "";
       switch(xhr.status) {
         case 200:
+          console.log("Success!");
           break;
         case 201:
-          content.innerHTML = `<b>Create</b>`;
+          content.innerHTML = `<b>Thanks for the input!</b>`;
+          console.log("Content Created!");
           break;
         case 204:
-          content.innerHTML = `<b>Updated (No Content)</b>`;
+          content.innerHTML = `<b>Thanks for the update!</b>`;
+          console.log("Content Updated!");
           break;
         case 400:
           content.innerHTML = `<b>Bad Request</b>`;
+          console.log("Bad Request");
           break;
         case 404:
           content.innerHTML = `<b>Not Found</b>`;
@@ -67,6 +82,7 @@
       
       const nameField = gameForm.querySelector('#nameField');
       const descField = gameForm.querySelector('#descField');
+      const tagField = gameForm.querySelector('#tagField');
       
       const xhr = new XMLHttpRequest();
       xhr.open(gameMethod, gameAction);
@@ -76,7 +92,7 @@
       
       xhr.onload = () => handleResponse(xhr);
       
-      const formData = `name=${nameField.value}&desc=${descField.value}`;
+      const formData = `name=${nameField.value}&desc=${descField.value}&tags=${tagField.value}`;
       
       xhr.send(formData);
       
@@ -86,7 +102,15 @@
 
     const sendGet = (e, userForm) => {
       const formMethod = userForm.querySelector('#methodSelect').value;
-      const formAction = userForm.querySelector('#urlField').value;
+      let formAction = userForm.getAttribute("action");
+      
+      const tagSearch = userForm.querySelector("#tagSearch");
+      
+      //adds query params if they exist
+      if(tagSearch.value){
+        formAction = `${formAction}?tags=${tagSearch.value}`;
+      }
+      
       const xhr = new XMLHttpRequest();
       xhr.open(formMethod, formAction);
       
@@ -118,30 +142,38 @@
   </script>
 </head>
 <body>
-  <section id="top">
+  <header>
+    <img id="corner" src="/assets/corner.png" alt="Quacklemore">
     <h1>RIT Improv's Shortform Library</h1>
-    <h3>Submit a shortform game</h3>
-    <form id="gameForm" action="/addGame" method="post">
-      <label for="name">Game Name: </label>
-      <input id="nameField" type="text" name="name" />
-      <br>
-      <textarea id="descField" rows="5" cols="50" name="desc">Enter description here...</textarea>
-      <br>
-      <input type="submit" value="Submit Game" />
-    </form>
-    <form id="userForm" action="/getGames" method="get">
-      <select id='urlField'>
-        <option value='/getGames'>/getGames</option>
-        <option value='/notReal'>/notReal</option>
-      </select>
-      <select id="methodSelect">
-        <option value="get">GET</option>
-        <option value="head">HEAD</option>
-      </select>
-      <input type="submit" value="Get Game" />
-    </form>
-  </section>
-  <section id="content">
-  </section>
+  </header>
+  <div id="page">
+    <section id="top">
+      <h3>Submit a shortform game</h3>
+      <form id="gameForm" action="/addGame" method="post">
+        <label for="name">Game Name: </label>
+        <input id="nameField" type="text" name="name" />
+        <br><br>
+        <textarea id="descField" rows="5" cols="50" name="desc">Enter description here...</textarea>
+        <br><br>
+        <label for="name">Enter tags separated by a space: </label>
+        <input id="tagField" type="text" name="tags" />
+        <br><br>
+        <input type="submit" value="Submit Game" />
+      </form>
+      <h3>Search for shortform games</h3>
+      <p>Search by tag or by title. Multiple tags supported</p>
+      <form id="userForm" action="/getGames" method="get">
+        <input id="tagSearch" type="text" name="tagSearch" />
+        <select id="methodSelect">
+          <option value="get">GET</option>
+          <option value="head">HEAD</option>
+        </select>
+        <input type="submit" value="Get Game" />
+      </form>
+    </section>
+    <section id="content">
+    </section>
+  </div>
+  <footer>Stephen Callen | 2018</footer>
 </body>
 </html>

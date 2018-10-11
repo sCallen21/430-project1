@@ -2,6 +2,9 @@ const fs = require('fs');
 
 const index = fs.readFileSync(`${__dirname}/../client/client.html`);
 const style = fs.readFileSync(`${__dirname}/../client/style.css`);
+const notFound = fs.readFileSync(`${__dirname}/../client/notFound.html`);
+const cornerPic = fs.readFileSync(`${__dirname}/../assets/corner.png`);
+const notFoundPic = fs.readFileSync(`${__dirname}/../assets/notFound.png`);
 
 // this function sends a response
 const respond = (request, response, content, code, type) => {
@@ -15,6 +18,15 @@ const getIndex = (request, response) => {
 };
 const getCSS = (request, response) => {
   respond(request, response, style, 200, 'text/css');
+};
+const getNotFound = (request, response) => {
+  respond(request, response, notFound, 404, 'text/html');
+};
+const getCornerPic = (request, response) => {
+  respond(request, response, cornerPic, 200, 'image/png');
+};
+const get404Pic = (request, response) => {
+  respond(request, response, notFoundPic, 200, 'image/png');
 };
 
 // helper function to return xml or json
@@ -92,6 +104,7 @@ const getNotImplemented = (request, response, acceptedTypes) => {
   return getReturnValue(request, response, acceptedTypes, msg, 501);
 };
 
+/* better implementation at the top
 const getNotFound = (request, response, acceptedTypes) => {
   // sends this object in either JSON or XML
   const msg = {
@@ -101,11 +114,14 @@ const getNotFound = (request, response, acceptedTypes) => {
 
   return getReturnValue(request, response, acceptedTypes, msg, 404);
 };
+*/
 
 // exports all functions
 module.exports = {
   getIndex,
   getCSS,
+  getCornerPic,
+  get404Pic,
   getSuccess,
   getBadRequest,
   getUnauthorized,
